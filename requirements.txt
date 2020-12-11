@@ -1,3 +1,4 @@
+requests>=2.25.0
 numpy<=1.18
 obspy>=1.2.2
 pymongo>=3.11.0
