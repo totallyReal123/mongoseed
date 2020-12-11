@@ -1,0 +1,27 @@
+import socket
+
+# global_variables
+server_address = ()
+debug = False
+
+def init(addr: (str, int)):
+	global server_address
+	server_address = addr
+
+def send_raw(command: str):
+	instruct = bytes(command.encode(encoding='ascii'))
+
+	with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+		s.connect(server_address)
+
+		s.sendall(instruct)
+		data = s.recv(520)
+
+	if(debug):
+		print("Debug Recieved Data:\n", data)
+	return data
+
+def get_channel_mseed(channel: str):
+	send_raw('SELECT ' + channel + '\r')
+	data = send_raw('DATA\r')
+	return data[8:]
