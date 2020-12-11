@@ -1,6 +1,5 @@
 import socket
 
-# global_variables
 server_address = ()
 debug = False
 
