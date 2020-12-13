@@ -8,7 +8,7 @@ MongoSeed is a Python program for taking data from a seedlink server and uploadi
 
 ### Prerequisites
 
-A python 3 environment should be setup and properly configured
+A python 3.8 environment should be setup and properly configured
 
 ### Installation
 
