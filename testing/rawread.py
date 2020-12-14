@@ -1,3 +1,5 @@
+import obspy
+
 def chunks(lst:list, n:int):
 	new_array = []
 	for i in range(0, len(lst), n):
@@ -21,15 +23,11 @@ def main():
 	words_list = chunks(bar, 4)
 	frame_list = chunks(words_list, 16)
 
-	#nibs = chunks(list_to_string(frame_list[0][0]), 2)
-	nibs = frame_list[0]
-	print(format(11, "08b"))
-
-	'''
-	foo = open("examine.txt", "w")
-	foo.write(str(bar))
-	foo.close()
-	'''
+	frame = frame_list[0 ]
+	for word in frame:
+		for byte in word:
+			print(chr(int(byte, 2)), "-", int(byte, 2), "-", byte)
 
 if __name__ == '__main__':
-	main()
+	#main()
+	tr = obspy.read("examine.mseed")
