@@ -15,6 +15,7 @@ def get_stream(channel: str):
 
 	fake_file = tempfile.TemporaryFile(mode="ab+")
 	fake_file.write(data)
+	fake_file.seek(0)
 
 	st = obspy.read(fake_file)
 	return st
