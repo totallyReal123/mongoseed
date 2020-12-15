@@ -3,11 +3,19 @@ import json
 import pymongo
 import tempfile
 import obspy
-import datetime
 import logging
+import time
+import sys
 
 def load_settings():
-	data = open("./config/config.json", "r").read()
+	try:
+		file = open("./config/config.json", "r")
+	except FileNotFoundError:
+		logging.critical("Unable to find config file")
+		sys.exit(0)
+
+	data = file.read()
+	file.close()
 	return json.loads(data)
 
 def get_stream(channel: str):
@@ -15,6 +23,7 @@ def get_stream(channel: str):
 
 	fake_file = tempfile.TemporaryFile(mode="ab+")
 	fake_file.write(data)
+	fake_file.seek(0)
 
 	st = obspy.read(fake_file)
 	return st
@@ -36,6 +45,20 @@ def get_data_timestamps(trace):
 
 	return time_correlation
 
+def serve_forever(channels: list, db: 'pymongo.database.Database'):
+	while True:
+		for channel in channels:
+			tmpdict = {}
+
+			tr = get_stream(channel)[0]
+			timestamps = get_data_timestamps(tr)
+			data = list(map(int, tr.data))
+
+			tmpdict['timestamps'] = timestamps
+			tmpdict['data'] = data
+
+			db[channel].insert_one(tmpdict)
+		time.sleep(2.5)
 
 def main():
 	jdata = load_settings()
@@ -64,17 +87,10 @@ def main():
 				print("MongoDB collection '" + channel + "' not found\nCreating Now...")
 				db.create_collection(channel)
 
-	for channel in channels:
-		tmpdict = {}
-
-		tr = get_stream(channel)[0]
-		timestamps = get_data_timestamps(tr)
-		data = list(map(int, tr.data))
-
-		tmpdict['timestamps'] = timestamps
-		tmpdict['data'] = data
-
-		db[channel].insert_one(tmpdict)
+	try:
+		serve_forever(channels, db)
+	except KeyboardInterrupt:
+		pass
 
 if __name__ == '__main__':
 	main()
