@@ -1,7 +1,6 @@
 import socket
 
 server_address = ()
-debug = False
 
 def init(addr: (str, int)):
 	global server_address
@@ -15,9 +14,6 @@ def send_raw(command: str):
 
 		s.sendall(instruct)
 		data = s.recv(520)
-
-	if(debug):
-		print("Debug Recieved Data:\n", data)
 	return data
 
 def get_channel_mseed(channel: str):
