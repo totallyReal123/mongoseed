@@ -16,6 +16,11 @@ def load_settings():
 
 	data = file.read()
 	file.close()
+
+	if len(data) == 0:
+		logging.critical("No data found in config file")
+		sys.exit(0)
+
 	return json.loads(data)
 
 def get_stream(channel: str):
@@ -61,6 +66,10 @@ def serve_forever(channels: list, db: 'pymongo.database.Database'):
 		time.sleep(2.5)
 
 def main():
+	# Set output level of logger
+	logging.getLogger().setLevel(logging.INFO)
+
+	# Load json data into variable
 	jdata = load_settings()
 
 	# Setup seedlink connection
@@ -76,7 +85,7 @@ def main():
 	db = client[dbname]
 
 	if not (dbname in client.list_database_names()):
-		print("MongoDB database '" + dbname + "' not found\nCreating Now...")
+		logging.warning("MongoDB database '" + dbname + "' not found - creating automagically")
 
 		for channel in channels:
 			db.create_collection(channel)
@@ -84,13 +93,15 @@ def main():
 		collections = db.list_collection_names()
 		for channel in channels:
 			if not(channel in collections):
-				print("MongoDB collection '" + channel + "' not found\nCreating Now...")
+				logging.warning("MongoDB collection '" + channel + "' not found - creating automagically")
 				db.create_collection(channel)
 
+	logging.info("Starting server main loop")
 	try:
 		serve_forever(channels, db)
 	except KeyboardInterrupt:
 		pass
+	logging.info("Keyboard Interrupt detected - closing server")
 
 if __name__ == '__main__':
 	main()
