@@ -1,11 +1,11 @@
 from modules import pyseed
-import json
-import pymongo
 import tempfile
-import obspy
 import logging
+import json
 import time
 import sys
+import pymongo
+import obspy
 
 def load_settings():
 	try:
