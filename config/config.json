@@ -1,15 +1,17 @@
 {
   "global": {
-  	"authenticateMongo":  false 
+    "authenticateMongo":  false,
+    "batchInterval": 3.0,
+    "singleInterval": 0 
   },
   "seedServer": {
-  	"address": "10.0.160.99",
-  	"port": 18000,
-  	"channels": ["HHZ", "HHN", "HHE", "EHZ"]
+    "address": "10.0.160.99",
+    "port": 18000,
+    "channels": ["HHZ", "HHN", "HHE", "EHZ"]
   },
   "mongoServer": {
-  	"address": "10.0.160.101",
-  	"port": 27017,
-  	"databaseName": "seeddata"
+    "address": "10.0.160.101",
+    "port": 27017,
+    "databaseName": "seeddata"
   }
 }
