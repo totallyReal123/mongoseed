@@ -61,7 +61,7 @@ def serve_forever(channels: list, db: 'pymongo.database.Database'):
 			collection = db[channel]
 
 			logging.info("Logging data for channel'" + channel +"'")
-			for i in range(len(data))
+			for i in range(len(data)):
 				tmpdict['timestamp'] = timestamps[i]
 				tmpdict['data'] = data[i]
 				collection.insert_one(tmpdict)
