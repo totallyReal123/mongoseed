@@ -58,13 +58,14 @@ def serve_forever(channels: list, db: 'pymongo.database.Database'):
 			tr = get_stream(channel)[0]
 			timestamps = get_data_timestamps(tr)
 			data = list(map(int, tr.data))
+			collection = db[channel]
 
-			tmpdict['timestamps'] = timestamps
-			tmpdict['data'] = data
-
-			db[channel].insert_one(tmpdict)
 			logging.info("Logging data for channel'" + channel +"'")
-		time.sleep(2.5)
+			for i in range(len(data))
+				tmpdict['timestamp'] = timestamps[i]
+				tmpdict['data'] = data[i]
+				collection.insert_one(tmpdict)
+		time.sleep(6)
 
 def main():
 	# Set output level of logger
