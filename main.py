@@ -63,6 +63,7 @@ def serve_forever(channels: list, db: 'pymongo.database.Database'):
 			tmpdict['data'] = data
 
 			db[channel].insert_one(tmpdict)
+			logging.info("Logging data for channel'" + channel +"'")
 		time.sleep(2.5)
 
 def main():
@@ -104,4 +105,6 @@ def main():
 	logging.info("Keyboard Interrupt detected - closing server")
 
 if __name__ == '__main__':
-	main()
+        # Configure the logging module before starting
+        logging.basicConfig(format='%(asctime)s-%(levelname)s-%(message)s', datefmt='%d-%b-%y %H:%M:%S')
+        main()
